@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20230827090908_add_province.cs" />
+    <Compile Remove="Migrations\20230827090908_add_province.Designer.cs" />
+    <Compile Remove="Migrations\20230827102703_add_province_setting.cs" />
+    <Compile Remove="Migrations\20230827102703_add_province_setting.Designer.cs" />
+    <Compile Remove="Migrations\20230827120808_add_provinceId_in_kiosk.cs" />
+    <Compile Remove="Migrations\20230827120808_add_provinceId_in_kiosk.Designer.cs" />
+    <Compile Remove="Migrations\20230827132912_add_province_relations.cs" />
+    <Compile Remove="Migrations\20230827132912_add_province_relations.Designer.cs" />
+    <Compile Remove="Migrations\20230827133211_add_province_relations2.cs" />
+    <Compile Remove="Migrations\20230827133211_add_province_relations2.Designer.cs" />
+    <Compile Remove="Migrations\20230827133239_add_province_relations3.cs" />
+    <Compile Remove="Migrations\20230827133239_add_province_relations3.Designer.cs" />
+    <Compile Remove="Migrations\20230827133751_add_province_relations4.cs" />
+    <Compile Remove="Migrations\20230827133751_add_province_relations4.Designer.cs" />
+    <Compile Remove="Migrations\20230828063914_add_province_province_Setting.cs" />
+    <Compile Remove="Migrations\20230828063914_add_province_province_Setting.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Entities\Entities.csproj" />
+  </ItemGroup>
+
+</Project>

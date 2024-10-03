@@ -1,0 +1,72 @@
+version: '3.4'
+
+services:    
+    sqlserver:
+        image: "mcr.microsoft.com/mssql/server:2022-latest"        
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=1Secure*Password1
+        ports:
+            - 1233:1433        
+        volumes:
+            - ./mssql:/var/opt/mssql/data        
+    donationapi:
+        image: "donationapi"
+        build:
+            context: .
+            dockerfile: Mahak.Api/Dockerfile
+        depends_on:
+            - sqlserver
+            #- elasticsearch
+        ports:
+            - "8008:80"
+        volumes:
+            - apks:/app/wwwroot/assets/apks
+            - uploads:/app/uploads
+        entrypoint: /bin/sh -c "sleep 10 && update-ca-certificates && dotnet Mahak.Api.dll"
+        #environment:
+        #    - DefaultConnection=Server=sqlserver;Database=MahakApiDb;User ID=sa;Password=1Secure*Password1;Encrypt=False;            
+        #    - ASPNETCORE_ENVIRONMENT=Production
+        environment:
+            #"TZ": "Asia/Tehran"
+            #"ConnectionStrings__SqlServer": "Server=nikudb.nikukiosk.svc:1433;Database=MahakApiDb;User=sa;Password=DJEduFdOXUTbJo1f9IUqNVF1jqwqgVwu;Encrypt=False"            
+            "ConnectionStrings__SqlServer": "Server=sqlserver;Database=MahakApiDb;User=sa;Password=1Secure*Password1;Encrypt=False"            
+            "SiteSettings__JwtSettings__Audience": "mahak.nikukiosk.com"
+            "SiteSettings__JwtSettings__Issuer": "mahak.nikukiosk.com"
+            "SiteSettings__JwtSettings__ExpirationMinutes": "1440"
+            "SiteSettings__SmsSettings__PhoneNumber": ""
+            "SiteSettings__SmsSettings__User": "mahak"
+            "SiteSettings__SmsSettings__Pass": "mahak23540"
+            "SiteSettings__SmsSettings__CheckInterval": "1"
+
+volumes:
+  apks:
+  uploads:
+
+
+    #- ./appsettings.Development.json:/app/appsettings.Development.json
+    #elasticsearch:  
+    #    container_name: elasticsearch  
+    #    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1  
+    #    ports:  
+    #        - 9200:9200  
+    #    volumes:  
+    #        - ./ElasticLogs:/usr/share/elasticsearch/data  
+    #    environment:  
+    #        - xpack.monitoring.enabled=true  
+    #        - xpack.watcher.enabled=false  
+    #        - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  
+    #        - discovery.type=single-node 
+        
+  
+    #kibana:  
+    #    container_name: kibana  
+    #    image: docker.elastic.co/kibana/kibana:7.9.1  
+    #    ports:  
+    #        - 5601:5601  
+    #    depends_on:  
+    #        - elasticsearch  
+    #    environment:  
+    #        - ELASTICSEARCH_URL=http://localhost:9200
+
+# front:https://nikudonation.darkube.app/ 

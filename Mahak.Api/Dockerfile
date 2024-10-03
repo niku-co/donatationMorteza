@@ -1,0 +1,32 @@
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+WORKDIR /app
+EXPOSE 80
+#EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+COPY ["Mahak.Api/Mahak.Api.csproj", "Mahak.Api/"]
+COPY ["WebFramework/WebFramework.csproj", "WebFramework/"]
+COPY ["Services/Services.csproj", "Services/"]
+COPY ["Data/Data.csproj", "Data/"]
+COPY ["Entities/Entities.csproj", "Entities/"]
+COPY ["Common/Common.csproj", "Common/"]
+RUN dotnet restore "Mahak.Api/Mahak.Api.csproj"
+COPY . .
+WORKDIR "/src/Mahak.Api"
+RUN dotnet build "Mahak.Api.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "Mahak.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+
+# Change timezone to local time
+ENV TZ=Asia/Tehran
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Mahak.Api.dll"]
